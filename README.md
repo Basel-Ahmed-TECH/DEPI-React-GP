@@ -64,7 +64,7 @@ A complete web application that generates and exports professional developer por
 
 ## 👥 Team Members
 
-- **Basel Ahmed Eissa Barakat** ![Captain Armband](./375485d0-3155-4577-a03d-ecc61a21ce55.png)   
+- **Basel Ahmed Eissa Barakat** 
 - Menna Hesham Ragab  
 - Salma Mohamed Saad  
 - Mohamed Sheref AbdElkader  
