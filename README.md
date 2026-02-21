@@ -64,7 +64,7 @@ A complete web application that generates and exports professional developer por
 
 ## 👥 Team Members
 
-- **Basel Ahmed Eissa Barakat** *(Team Leader)*  
+- **Basel Ahmed Eissa Barakat**   
 - Menna Hesham Ragab  
 - Salma Mohamed Saad  
 - Mohamed Sheref AbdElkader  
