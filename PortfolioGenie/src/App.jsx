@@ -1,23 +1,15 @@
-import Navbar from './components/UI/Navbar'
-import Hero from './components/UI/Hero'
-import Features from './components/UI/Features'
-import AIPowered from './components/UI/AIPowered'
-import HowItWorks from './components/UI/HowItWorks'
-import BuildPortfolio from './components/UI/BuildPortfolio'
-import Footer from './components/UI/Footer'
+import Navbar from './components/UI/Navbar';
+import Footer from './components/UI/Footer';
+import HomePage from './components/pages/Home';
 
 function App() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <Navbar />
-      <Hero />
-      <Features />
-      <AIPowered />
-      <HowItWorks />
-      <BuildPortfolio/>
-      <Footer/>
+      <HomePage />
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
