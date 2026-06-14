@@ -1,6 +1,7 @@
 import { useTheme } from "../../context/ThemeContext";
 import { useState } from "react";
 import { FiMoon } from "react-icons/fi";
+import { BsStars } from "react-icons/bs";
 import { IoSunnyOutline } from "react-icons/io5";
 
 function Navbar() {
