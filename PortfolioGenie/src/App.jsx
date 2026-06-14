@@ -1,6 +1,7 @@
 import Navbar from './components/UI/Navbar'
 import Hero from './components/UI/Hero'
 import Features from './components/UI/Features'
+import AIPowered from './components/UI/AIPowered'
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <Navbar />
       <Hero />
       <Features />
+      <AIPowered />
     </div>
   )
 }

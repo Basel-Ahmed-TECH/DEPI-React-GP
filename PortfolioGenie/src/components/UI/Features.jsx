@@ -50,7 +50,7 @@ function Features() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group relative bg-white dark:bg-gray-900/50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 dark:border-gray-800"
+              className="group relative bg-white dark:bg-[#020618] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 dark:border-gray-800"
             >
               {/* Icon with gradient background */}
               <div
