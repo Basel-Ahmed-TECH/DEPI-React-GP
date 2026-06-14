@@ -7,7 +7,7 @@ function Hero() {
   const { theme } = useTheme();
 
   return (
-    <section className="min-h-screen flex items-center pt-20    justify-center bg-white dark:bg-[#020618]">
+    <section className="min-h-screen flex items-center pt-20 justify-center bg-gray-50 dark:bg-[#020618]">
       <div className="container mx-auto px-4 py-20">
         <div className="text-center">
           {/* Label */}
@@ -31,7 +31,7 @@ function Hero() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <a
               href="#"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-black hover:bg-slate-800 text-white text-lg font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-black dark:bg-white dark:text-black hover:bg-slate-800 text-white text-lg font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
             >
               <PiMagicWandBold size={24} />
               Start Building Now

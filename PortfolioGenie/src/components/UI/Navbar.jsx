@@ -12,9 +12,15 @@ function Navbar() {
     <nav className="fixed top-0 w-full bg-white dark:bg-[#0C1327] border-gray-200 dark:border-gray-700 z-50">
       <div className="px-4">
         <div className="flex justify-between items-center h-24">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white ml-4">
-            PortfolioGenie
-          </h1>
+          {/* Logo with Icon and Gradient Background */}
+          <div className="flex items-center ml-4">
+            <div className="inline-flex p-2 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600">
+              <BsStars size={24} className="text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white ml-3">
+              PortfolioGenie
+            </h1>
+          </div>
 
           {/* Mobile menu button */}
           <button
