@@ -31,7 +31,7 @@ function Hero() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <a
               href="#"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-black dark:bg-white dark:text-black hover:bg-slate-800 text-white text-lg font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-black dark:bg-white dark:hover:bg-gray-300 dark:text-black hover:bg-slate-800 text-white text-lg font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
             >
               <PiMagicWandBold size={24} />
               Start Building Now
