@@ -4,6 +4,7 @@ import Features from './components/UI/Features'
 import AIPowered from './components/UI/AIPowered'
 import HowItWorks from './components/UI/HowItWorks'
 import BuildPortfolio from './components/UI/BuildPortfolio'
+import Footer from './components/UI/Footer'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <AIPowered />
       <HowItWorks />
       <BuildPortfolio/>
+      <Footer/>
     </div>
   )
 }

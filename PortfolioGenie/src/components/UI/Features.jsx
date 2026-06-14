@@ -33,7 +33,7 @@ function Features() {
   ];
 
   return (
-    <section className="py-20 bg-white dark:bg-[#0C1327]">
+    <section id="features" className="py-28 bg-white dark:bg-[#0C1327]">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16">

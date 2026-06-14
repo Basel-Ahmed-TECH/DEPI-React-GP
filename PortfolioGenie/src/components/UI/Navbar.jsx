@@ -8,6 +8,14 @@ function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleScroll = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      setIsOpen(false); // Close mobile menu after clicking
+    }
+  };
+
   return (
     <nav className="fixed top-0 w-full bg-white dark:bg-[#0C1327] border-gray-200 dark:border-gray-700 z-50">
       <div className="px-4">
@@ -53,18 +61,18 @@ function Navbar() {
 
           {/* Desktop menu */}
           <div className="hidden md:flex items-center space-x-8 mr-4">
-            <a
-              href="#"
+            <button
+              onClick={() => handleScroll("features")}
               className="text-gray-900 dark:text-white text-lg hover:text-purple-500 transition-colors duration-100 leading-none"
             >
               Features
-            </a>
-            <a
-              href="#"
+            </button>
+            <button
+              onClick={() => handleScroll("how-it-works")}
               className="text-gray-900 dark:text-white text-lg hover:text-purple-500 transition-colors duration-100 leading-none"
             >
               How It Works
-            </a>
+            </button>
             <button
               onClick={toggleTheme}
               className="text-gray-900 dark:text-white hover:text-purple-500 transition-colors duration-100 flex items-center justify-center"
@@ -88,18 +96,18 @@ function Navbar() {
         {/* Mobile menu */}
         {isOpen && (
           <div className="md:hidden py-4 space-y-3 border-t border-gray-200 dark:border-gray-700 px-4">
-            <a
-              href="#"
+            <button
+              onClick={() => handleScroll("features")}
               className="block text-gray-900 dark:text-white hover:text-purple-500 py-2"
             >
               Features
-            </a>
-            <a
-              href="#"
+            </button>
+            <button
+              onClick={() => handleScroll("how-it-works")}  
               className="block text-gray-900 dark:text-white hover:text-purple-500 py-2"
             >
               How It Works
-            </a>
+            </button>
             <button
               onClick={toggleTheme}
               className="block w-full text-left text-gray-900 dark:text-white hover:text-purple-500 py-2"
