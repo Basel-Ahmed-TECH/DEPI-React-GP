@@ -17,13 +17,13 @@ function GitHubRepositories({ repos }) {
               href={repo.url}
               target="_blank"
               rel="noreferrer"
-              className="font-semibold text-purple-600 dark:text-purple-400"
+              className="font-semibold text-lg text-purple-600 dark:text-purple-400"
             >
               {repo.name}
             </a>
 
             {repo.description && (
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-md dark:text-white text-gray-500 mt-1">
                 {repo.description}
               </p>
             )}

@@ -35,7 +35,7 @@ export const processRepos = (repos) => {
   if (!repos || repos.length === 0) return [];
   
   return repos
-    .filter(repo => !repo.fork) // Optional: filter out forked repos
+    .filter(repo => !repo.fork) // filter out forked repos
     .map(formatRepoData)
     .sort((a, b) => b.stars - a.stars); // Sort by stars
 };

@@ -18,7 +18,7 @@ function GitHubProfile({ user }) {
           </p>
 
           {user.location && (
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm dark:text-white text-gray-500 mt-1">
               {user.location}
             </p>
           )}
@@ -26,16 +26,15 @@ function GitHubProfile({ user }) {
       </div>
 
       {user.bio && (
-        <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+        <div className="mb-4 p-3 dark:text-white bg-gray-50 dark:bg-gray-700/50 rounded-lg">
           {user.bio}
         </div>
       )}
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <Stat value={user.publicRepos} label="Repositories" />
         <Stat value={user.followers} label="Followers" />
         <Stat value={user.following} label="Following" />
-        <Stat value={user.totalStars} label="Total Stars" />
       </div>
     </div>
   );
