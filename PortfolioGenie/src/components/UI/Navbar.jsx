@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { useState } from "react";
 import { FiMoon } from "react-icons/fi";
@@ -73,6 +74,13 @@ function Navbar() {
             >
               How It Works
             </button>
+
+            <Link
+              to="/github"
+              className="text-gray-900 dark:text-white text-lg hover:text-purple-500 transition-colors duration-100"
+            >
+              GitHub
+            </Link>
             <button
               onClick={toggleTheme}
               className="text-gray-900 dark:text-white hover:text-purple-500 transition-colors duration-100 flex items-center justify-center"
@@ -103,7 +111,7 @@ function Navbar() {
               Features
             </button>
             <button
-              onClick={() => handleScroll("how-it-works")}  
+              onClick={() => handleScroll("how-it-works")}
               className="block text-gray-900 dark:text-white hover:text-purple-500 py-2"
             >
               How It Works
