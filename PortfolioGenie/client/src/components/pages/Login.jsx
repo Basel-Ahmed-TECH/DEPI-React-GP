@@ -43,7 +43,7 @@ export default function Login() {
 
       // 4. Send them back to the main authenticated dashboard view
       setTimeout(() => {
-        navigate("/");
+        navigate("/github");
       }, 1500);
 
     } catch (err) {

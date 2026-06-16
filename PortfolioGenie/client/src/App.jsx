@@ -4,7 +4,7 @@ import Footer from './components/UI/Footer';
 import HomePage from './components/pages/Home';
 import Signup from './components/pages/Signup';
 import Login from './components/pages/Login';
-
+import GitHubPage from './components/pages/GitHubPage';
 function App() {
   return (
     <Router>
@@ -22,6 +22,7 @@ function App() {
               <main className="flex-grow">
                 <Routes>
                   <Route path="/" element={<HomePage />} />
+                  <Route path="/github" element={<GitHubPage />} />
                 </Routes>
               </main>
               <Footer />
