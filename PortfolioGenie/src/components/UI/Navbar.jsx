@@ -129,7 +129,7 @@ function Navbar() {
             </button>
             <a
               href="#"
-              className="block text-center text-gray-900 dark:text-white hover:text-purple-500 py-2 px-6 dark:bg-white bg-black rounded-lg hover:bg-slate-800 dark:hover:bg-gray-300 transition-colors duration-200"
+              className="block text-center text-white font-semibold dark:text-gray-900 hover:text-purple-500 py-2 px-6 dark:bg-white bg-black rounded-lg hover:bg-slate-800 dark:hover:bg-gray-300 transition-colors duration-200"
             >
               Get Started
             </a>
