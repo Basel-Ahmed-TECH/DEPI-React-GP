@@ -1,0 +1,202 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext"; // Ensure this relative path points exactly to your ThemeContext file
+import { BsStars } from "react-icons/bs";
+import { MdOutlineEmail } from "react-icons/md";
+import { CiLock } from "react-icons/ci";
+import { FiMoon } from "react-icons/fi";
+import { IoSunnyOutline } from "react-icons/io5";
+
+export default function Signup() {
+  const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
+
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      // 1. Send registration payload to Express server
+      const res = await fetch("http://localhost:5000/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: form.email, password: form.password }),
+      });
+      
+      const data = await res.json();
+      
+      // 2. Catch database or validation failure responses (e.g., duplicate user)
+      if (!res.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
+      
+      // 3. Success! Securely store the issued JWT token in browser localStorage
+      localStorage.setItem("token", data.token);
+      setSuccess("Account created successfully! Redirecting... 🚀");
+      
+      // 4. Smoothly route the authenticated user back to the home/dashboard view
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 dark:bg-[#0C1327] flex items-center justify-center px-4 transition-colors duration-300">
+
+      {/* Dynamic Theme Toggle Button */}
+      <button
+        type="button"
+        onClick={toggleTheme}
+        className="fixed top-5 right-5 text-gray-600 dark:text-gray-300 hover:text-purple-500 transition-colors focus:outline-none"
+        aria-label="Toggle theme"
+      >
+        {theme === "light" ? <FiMoon size={22} /> : <IoSunnyOutline size={22} />}
+      </button>
+
+      {/* Main Authentication Card */}
+      <div className="bg-white dark:bg-[#1a2540] rounded-2xl shadow-lg p-10 w-full max-w-md transition-colors duration-300">
+
+        {/* Branding & Logo */}
+        <div className="flex items-center justify-center gap-2 mb-8">
+          <div className="inline-flex p-2 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600">
+            <BsStars size={22} className="text-white" />
+          </div>
+          <span className="text-2xl font-bold text-gray-900 dark:text-white">
+            PortfolioGenie
+          </span>
+        </div>
+
+        {/* Headings */}
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-2">
+          Create Account
+        </h1>
+        <p className="text-gray-500 dark:text-gray-400 text-center mb-8">
+          Start building your professional portfolio today
+        </p>
+
+        {/* Form Container */}
+        <form onSubmit={handleSubmit} className="space-y-5">
+
+          {/* Email Input Field */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                Full Name
+            </label>
+            <div className="flex items-center gap-3 bg-gray-100 dark:bg-[#0C1327] rounded-lg px-4 py-3 border border-transparent focus-within:border-purple-500 transition-colors">
+                <MdOutlineEmail size={18} className="text-gray-400 flex-shrink-0" />
+                <input
+                    type="text"
+                    placeholder="John Doe"
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    required
+                    className="bg-transparent w-full text-gray-900 dark:text-white placeholder-gray-400 outline-none text-sm"
+                />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+              Email
+            </label>
+            <div className="flex items-center gap-3 bg-gray-100 dark:bg-[#0C1327] rounded-lg px-4 py-3 border border-transparent focus-within:border-purple-500 transition-colors">
+              <MdOutlineEmail size={18} className="text-gray-400 flex-shrink-0" />
+              <input
+                type="email"
+                placeholder="developer@example.com"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                required
+                className="bg-transparent w-full text-gray-900 dark:text-white placeholder-gray-400 outline-none text-sm"
+              />
+            </div>
+          </div>
+
+          {/* Password Input Field */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+              Password
+            </label>
+            <div className="flex items-center gap-3 bg-gray-100 dark:bg-[#0C1327] rounded-lg px-4 py-3 border border-transparent focus-within:border-purple-500 transition-colors">
+              <CiLock size={18} className="text-gray-400 flex-shrink-0" />
+              <input
+                type="password"
+                placeholder="Choose a strong password"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                required
+                className="bg-transparent w-full text-gray-900 dark:text-white placeholder-gray-400 outline-none text-sm"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+              Confirm Password
+            </label>
+            <div className="flex items-center gap-3 bg-gray-100 dark:bg-[#0C1327] rounded-lg px-4 py-3 border border-transparent focus-within:border-purple-500 transition-colors">
+                <CiLock size={18} className="text-gray-400 flex-shrink-0" />
+                <input
+                    type="password"                    placeholder="Confirm your password"
+                    value={form.confirmPassword}
+                    onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+                    required
+                    className="bg-transparent w-full text-gray-900 dark:text-white placeholder-gray-400 outline-none text-sm"
+                />
+            </div>
+          </div>
+          <div>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+                By creating an account, you agree to our Terms of Service and Privacy Policy.
+            </p>
+          </div>
+
+          {/* Conditional Error Notification Panel */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-sm p-3 rounded-xl text-center font-medium">
+              {error}
+            </div>
+          )}
+
+          {/* Conditional Success Notification Panel */}
+          {success && (
+            <div className="bg-green-500/10 border border-green-500/20 text-green-500 text-sm p-3 rounded-xl text-center font-medium">
+              {success}
+            </div>
+          )}
+
+          {/* Submit Action Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-black dark:bg-white text-white dark:text-gray-900 font-bold py-4 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors duration-200 text-base disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
+          >
+            {loading ? "Creating Account..." : "Sign Up"}
+          </button>
+
+          {/* Fallback Redirection Option Link */}
+          <p className="text-center text-sm text-gray-500 dark:text-gray-400 pt-2">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="text-purple-600 font-semibold hover:text-purple-700 transition-colors"
+            >
+              Sign in
+            </Link>
+          </p>
+        </form>
+      </div>
+    </div>
+  );
+}
