@@ -93,7 +93,8 @@ function Navbar() {
               )}
             </button>
             <Link
-              to="/login"   
+              to="/login"
+              
               className="px-6 py-4 dark:bg-white bg-black rounded-lg dark:text-gray-900 text-white hover:bg-slate-800 font-medium text-lg dark:hover:bg-gray-300 transition-colors duration-200 leading-none inline-flex items-center"
             >
               Get Started
@@ -129,8 +130,7 @@ function Navbar() {
             </button>
             <Link
               to="/login"
-              onAbort={()=> setIsOpen(false)}
-              className="block text-center text-gray-900 dark:text-white hover:text-purple-500 py-2 px-6 dark:bg-white bg-black rounded-lg hover:bg-slate-800 dark:hover:bg-gray-300 transition-colors duration-200"
+              className="block text-center text-white font-semibold dark:text-gray-900 hover:text-purple-500 py-2 px-6 dark:bg-white bg-black rounded-lg hover:bg-slate-800 dark:hover:bg-gray-300 transition-colors duration-200"
             >
               Get Started
             </Link>
