@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useGitHub } from "../../context/GitHubContext";
 
 import GitHubHero from "../github/GitHubHero";
@@ -15,16 +15,9 @@ function GitHubEntry() {
     loading,
     error,
     isUsernameSubmitted,
-    resetGitHub,
   } = useGitHub();
 
   const [inputValue, setInputValue] = useState("");
-
-  useEffect(() => {
-    return () => {
-      resetGitHub();
-    };
-  }, [resetGitHub]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
