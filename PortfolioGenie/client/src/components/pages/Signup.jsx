@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useTheme } from "../../context/ThemeContext"; // Ensure this relative path points exactly to your ThemeContext file
+import { useTheme } from "../../context/ThemeContext"; 
 import { BsStars } from "react-icons/bs";
 import { MdOutlineEmail } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
@@ -23,7 +23,7 @@ export default function Signup() {
     setSuccess("");
 
     try {
-      // 1. Send registration payload to Express server
+      // 1. Connect to Express server and send signup payload
       const res = await fetch("http://localhost:5000/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -32,18 +32,18 @@ export default function Signup() {
       
       const data = await res.json();
       
-      // 2. Catch database or validation failure responses (e.g., duplicate user)
+      
       if (!res.ok) {
         throw new Error(data.message || "Registration failed");
       }
       
-      // 3. Success! Securely store the issued JWT token in browser localStorage
-      localStorage.setItem("token", data.token);
-      setSuccess("Account created successfully! Redirecting... 🚀");
       
-      // 4. Smoothly route the authenticated user back to the home/dashboard view
+      localStorage.setItem("token", data.token);
+      setSuccess("Account created successfully! Redirecting...");
+      
+      
       setTimeout(() => {
-        navigate("/");
+        navigate("/github");
       }, 1500);
 
     } catch (err) {
@@ -56,7 +56,7 @@ export default function Signup() {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-[#0C1327] flex items-center justify-center px-4 transition-colors duration-300">
 
-      {/* Dynamic Theme Toggle Button */}
+      
       <button
         type="button"
         onClick={toggleTheme}
@@ -69,7 +69,7 @@ export default function Signup() {
       {/* Main Authentication Card */}
       <div className="bg-white dark:bg-[#1a2540] rounded-2xl shadow-lg p-10 w-full max-w-md transition-colors duration-300">
 
-        {/* Branding & Logo */}
+        
         <div className="flex items-center justify-center gap-2 mb-8">
           <div className="inline-flex p-2 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600">
             <BsStars size={22} className="text-white" />
@@ -79,7 +79,7 @@ export default function Signup() {
           </span>
         </div>
 
-        {/* Headings */}
+        
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-2">
           Create Account
         </h1>
@@ -87,10 +87,10 @@ export default function Signup() {
           Start building your professional portfolio today
         </p>
 
-        {/* Form Container */}
+        
         <form onSubmit={handleSubmit} className="space-y-5">
 
-          {/* Email Input Field */}
+          {/* Email Field */}
           <div>
             <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
                 Full Name
@@ -124,7 +124,7 @@ export default function Signup() {
             </div>
           </div>
 
-          {/* Password Input Field */}
+          {/* Password Field */}
           <div>
             <label className="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
               Password
@@ -162,21 +162,21 @@ export default function Signup() {
             </p>
           </div>
 
-          {/* Conditional Error Notification Panel */}
+          
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-sm p-3 rounded-xl text-center font-medium">
               {error}
             </div>
           )}
 
-          {/* Conditional Success Notification Panel */}
+          
           {success && (
             <div className="bg-green-500/10 border border-green-500/20 text-green-500 text-sm p-3 rounded-xl text-center font-medium">
               {success}
             </div>
           )}
 
-          {/* Submit Action Button */}
+        
           <button
             type="submit"
             disabled={loading}
@@ -185,7 +185,7 @@ export default function Signup() {
             {loading ? "Creating Account..." : "Sign Up"}
           </button>
 
-          {/* Fallback Redirection Option Link */}
+          
           <p className="text-center text-sm text-gray-500 dark:text-gray-400 pt-2">
             Already have an account?{" "}
             <Link

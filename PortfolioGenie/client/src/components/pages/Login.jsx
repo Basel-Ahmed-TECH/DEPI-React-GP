@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useTheme } from "../../context/ThemeContext"; // Ensure this relative path points exactly to your ThemeContext file
+import { useTheme } from "../../context/ThemeContext"; 
 import { BsStars } from "react-icons/bs";
 import { MdOutlineEmail } from "react-icons/md";
 import { CiLock } from "react-icons/ci";
@@ -23,7 +23,7 @@ export default function Login() {
     setSuccess("");
 
     try {
-      // 1. Send authentication payload to Express server
+      // 1. connect to Express server and send login payload
       const res = await fetch("http://localhost:5000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -32,19 +32,19 @@ export default function Login() {
 
       const data = await res.json();
 
-      // 2. Catch incorrect email/password credentials or server errors
+      
       if (!res.ok) {
         throw new Error(data.message || "Login failed");
       }
 
-      // 3. Success! Overwrite or save the verified JWT token to local browser memory
+      
       localStorage.setItem("token", data.token);
-      setSuccess("Logged in successfully! Welcome back... 🚀");
+      setSuccess("Logged in successfully! Welcome back... ");
 
-      // 4. Send them back to the main authenticated dashboard view
+      
       setTimeout(() => {
         navigate("/github");
-      }, 1500);
+      }, 1000);
 
     } catch (err) {
       setError(err.message);
@@ -56,7 +56,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-[#0C1327] flex items-center justify-center px-4 transition-colors duration-300">
       
-      {/* Dynamic Theme Toggle Button */}
+      {/* Theme Button */}
       <button
         type="button"
         onClick={toggleTheme}
@@ -69,7 +69,7 @@ export default function Login() {
       {/* Main Authentication Card */}
       <div className="bg-white dark:bg-[#1a2540] rounded-2xl shadow-lg p-10 w-full max-w-md transition-colors duration-300">
         
-        {/* Branding & Logo */}
+        
         <div className="flex items-center justify-center gap-2 mb-8">
           <div className="inline-flex p-2 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600">
             <BsStars size={22} className="text-white" />
@@ -79,7 +79,7 @@ export default function Login() {
           </span>
         </div>
 
-        {/* Headings */}
+        
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-2">
           Welcome Back
         </h1>
@@ -87,7 +87,7 @@ export default function Login() {
           Sign in to your account to continue building
         </p>
 
-        {/* Form Container */}
+       
         <form onSubmit={handleSubmit} className="space-y-5">
           
           {/* Email Input Field */}
@@ -125,7 +125,7 @@ export default function Login() {
               />
             </div>
           </div>
-          {/* remeber me and forgot password in same line */}
+          
             <div className="flex items-center justify-between">
                 <div className="flex items-center">
                     <input
@@ -149,21 +149,21 @@ export default function Login() {
 
           
 
-          {/* Conditional Error Notification Panel */}
+          
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-sm p-3 rounded-xl text-center font-medium">
               {error}
             </div>
           )}
 
-          {/* Conditional Success Notification Panel */}
+          
           {success && (
             <div className="bg-green-500/10 border border-green-500/20 text-green-500 text-sm p-3 rounded-xl text-center font-medium">
               {success}
             </div>
           )}
 
-          {/* Submit Action Button */}
+         
           <button
             type="submit"
             disabled={loading}
@@ -172,7 +172,7 @@ export default function Login() {
             {loading ? "Signing In..." : "Sign In"}
           </button>
 
-          {/* Registration Redirection Option Link */}
+          
           <p className="text-center text-sm text-gray-500 dark:text-gray-400 pt-2">
             Don't have an account?{" "}
             <Link

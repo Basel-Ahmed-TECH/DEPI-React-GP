@@ -9,11 +9,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Isolate Auth Pages (No Navbar, No Footer) */}
+        {/* To isolate auth pages (No Navbar, No Footer) */}
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
 
-        {/* Main Website Layout (Navbar + Home View + Footer) */}
+        {/* Main Website Layout (Navbar + page View + Footer) */}
         <Route
           path="/*"
           element={

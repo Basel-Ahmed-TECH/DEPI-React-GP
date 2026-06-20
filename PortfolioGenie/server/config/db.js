@@ -1,10 +1,10 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-// Create a reusable connection pool targeting your Neon Cloud Database
+// Connection pool for neon database
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false } // Required for secure handshakes with Neon
+  ssl: { rejectUnauthorized: false } 
 });
 
 module.exports = pool;

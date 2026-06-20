@@ -6,11 +6,11 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable Cross-Origin Resource Sharing so your Vite frontend can talk to your server
+// Enable CORS for frontend requests
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use(express.json()); // Parses incoming request bodies as JSON objects
 
-// Wire up your authentication router group under the /auth prefix
+
 app.use('/auth', authRoutes);
 
 app.get('/', (req, res) => {
