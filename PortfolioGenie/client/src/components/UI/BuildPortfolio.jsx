@@ -1,7 +1,9 @@
-import { BsStars } from "react-icons/bs";
 import { PiMagicWandBold } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 function BuildPortfolio() {
+  const isLoggedIn = !!localStorage.getItem("token");
+
   return (
     <section className="flex items-center pt-20 justify-center bg-gradient-to-br from-purple-600 to-blue-600">
       <div className="container mx-auto px-4 py-20">
@@ -18,13 +20,13 @@ function BuildPortfolio() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <a
-              href="#"
+            <Link
+              to={isLoggedIn ? "/github" : "/login"}
               className="inline-flex items-center gap-2 px-8 py-3 bg-white hover:bg-gray-300 text-black text-lg font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
             >
               <PiMagicWandBold size={24} />
               Get Started For Free
-            </a>
+            </Link>
           </div>
         </div>
       </div>

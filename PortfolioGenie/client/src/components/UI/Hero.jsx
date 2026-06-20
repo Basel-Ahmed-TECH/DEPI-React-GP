@@ -1,10 +1,11 @@
 import { useTheme } from "../../context/ThemeContext";
 import { BsStars } from "react-icons/bs";
 import { PiMagicWandBold } from "react-icons/pi";
+import { Link } from "react-router-dom";
 import heroPicture from "../../assets/heroPicture.jpg";
 
 function Hero() {
-  const { theme } = useTheme();
+  const isLoggedIn = !!localStorage.getItem("token");
 
   return (
     <section className="min-h-screen flex items-center pt-20 justify-center bg-gray-50 dark:bg-[#020618]">
@@ -29,13 +30,13 @@ function Hero() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <a
-              href="#"
+            <Link
+              to={isLoggedIn ? "/github" : "/login"}
               className="inline-flex items-center gap-2 px-8 py-3 bg-black dark:bg-white dark:hover:bg-gray-300 dark:text-black hover:bg-slate-800 text-white text-lg font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
             >
               <PiMagicWandBold size={24} />
               Start Building Now
-            </a>
+            </Link>
           </div>
 
           {/* Image Section with Gradient Overlay */}
