@@ -5,6 +5,8 @@ import HomePage from './components/pages/Home';
 import Signup from './components/pages/Signup';
 import Login from './components/pages/Login';
 import GitHubPage from './components/pages/GitHubPage';
+import ProfilePage from './components/pages/ProfilePage';
+import PortfolioViewPage from './components/UI/PortfolioViewPage';
 function App() {
   return (
     <Router>
@@ -23,6 +25,8 @@ function App() {
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/github" element={<GitHubPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/portfolio/:id"    element={<PortfolioViewPage />} />
                 </Routes>
               </main>
               <Footer />
