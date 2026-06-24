@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useGitHub } from "../../context/GitHubContext";
+import { usePortfolio } from "../../context/PortfolioContext";
 
 import GitHubHero from "../github/GitHubHero";
 import LoadingSpinner from "../github/LoadingSpinner";
@@ -17,6 +18,7 @@ function GitHubEntry() {
     isUsernameSubmitted,
   } = useGitHub();
 
+  const { activePortfolio } = usePortfolio();
   const [inputValue, setInputValue] = useState("");
 
   const handleSubmit = (e) => {
@@ -26,6 +28,23 @@ function GitHubEntry() {
       setUsername(inputValue.trim());
     }
   };
+
+  // ── Edit mode: skip GitHub entirely, render builder from saved data ──
+  if (activePortfolio?.data) {
+    return (
+      <div className="min-h-screen pt-24 px-4 bg-gray-50 dark:bg-[#020618]">
+        <div className="mx-auto max-w-none">
+          <PortfolioBuilderForm
+            profile={activePortfolio.data.metadata?.githubUsername
+              ? { login: activePortfolio.data.metadata.githubUsername }
+              : {}}
+            repos={[]}
+            userData={null}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen pt-24 px-4 bg-gray-50 dark:bg-[#020618]">

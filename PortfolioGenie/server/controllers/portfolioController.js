@@ -200,38 +200,32 @@ async function callGemini({ email, profile, repos }) {
 }
 
 async function ensurePortfolioTable() {
+  // Create table if it doesn't exist at all
   await pool.query(`
     CREATE TABLE IF NOT EXISTS portfolios (
       id SERIAL PRIMARY KEY,
       user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-      title TEXT NOT NULL,
+      title TEXT NOT NULL DEFAULT 'Untitled Portfolio',
+      name TEXT NOT NULL DEFAULT 'Untitled Portfolio',
       github_username TEXT,
-      data JSONB NOT NULL,
+      data JSONB NOT NULL DEFAULT '{}',
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
 
-  await pool.query(`
-    ALTER TABLE portfolios
-      ADD COLUMN IF NOT EXISTS user_id INTEGER,
-      ADD COLUMN IF NOT EXISTS name TEXT,
-      ADD COLUMN IF NOT EXISTS title TEXT,
-      ADD COLUMN IF NOT EXISTS github_username TEXT,
-      ADD COLUMN IF NOT EXISTS data JSONB,
-      ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW(),
-      ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW()
-  `);
+  // Only add columns that are genuinely optional (safe to add after the fact)
+  await pool.query(`ALTER TABLE portfolios ADD COLUMN IF NOT EXISTS github_username TEXT`);
+  await pool.query(`ALTER TABLE portfolios ADD COLUMN IF NOT EXISTS name TEXT`);
 
+  // Backfill any nulls from before the NOT NULL defaults were in place
   await pool.query(`
     UPDATE portfolios
     SET
-      name = COALESCE(name, title, 'Untitled Portfolio'),
-      title = COALESCE(title, 'Untitled Portfolio'),
-      data = COALESCE(data, '{}'::jsonb),
-      created_at = COALESCE(created_at, NOW()),
-      updated_at = COALESCE(updated_at, NOW())
-    WHERE name IS NULL OR title IS NULL OR data IS NULL OR created_at IS NULL OR updated_at IS NULL
+      name  = COALESCE(name,  title, 'Untitled Portfolio'),
+      title = COALESCE(title, name,  'Untitled Portfolio'),
+      data  = COALESCE(data,  '{}'::jsonb)
+    WHERE name IS NULL OR title IS NULL OR data IS NULL
   `);
 }
 
@@ -277,9 +271,9 @@ exports.savePortfolio = async (req, res) => {
     const portfolioTitle = clampText(title, 140) || `${req.user.email}'s Portfolio`;
     const result = await pool.query(
       `INSERT INTO portfolios (user_id, name, title, github_username, data)
-       VALUES ($1, $2, $3, $4, $5)
+       VALUES ($1, $2, $3, $4, $5::jsonb)
        RETURNING id, name, title, github_username, data, created_at, updated_at`,
-      [req.user.id, portfolioTitle, portfolioTitle, clampText(githubUsername, 80), data]
+      [req.user.id, portfolioTitle, portfolioTitle, clampText(githubUsername, 80), JSON.stringify(data)]
     );
 
     return res.status(201).json({
@@ -289,5 +283,83 @@ exports.savePortfolio = async (req, res) => {
   } catch (error) {
     console.error('Portfolio Save Error:', error.message);
     return res.status(500).json({ message: 'Unable to save portfolio.' });
+  }
+};
+
+exports.getUserPortfolios = async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT id, name, title, github_username, created_at, updated_at
+       FROM portfolios
+       WHERE user_id = $1
+       ORDER BY updated_at DESC`,
+      [req.user.id]
+    );
+    return res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Get Portfolios Error:', error.message);
+    return res.status(500).json({ message: 'Unable to fetch portfolios.' });
+  }
+};
+
+exports.deletePortfolio = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query(
+      'DELETE FROM portfolios WHERE id = $1 AND user_id = $2 RETURNING id',
+      [id, req.user.id]
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: 'Portfolio not found or not yours.' });
+    }
+    return res.status(200).json({ message: 'Portfolio deleted successfully.' });
+  } catch (error) {
+    console.error('Delete Portfolio Error:', error.message);
+    return res.status(500).json({ message: 'Unable to delete portfolio.' });
+  }
+};
+
+// GET /portfolio/:id  — fetch one portfolio (owner only)
+exports.getPortfolioById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await pool.query(
+      `SELECT id, name, title, github_username, data, created_at, updated_at
+       FROM portfolios WHERE id = $1 AND user_id = $2`,
+      [id, req.user.id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Portfolio not found.' });
+    }
+    return res.status(200).json({ portfolio: result.rows[0] });
+  } catch (error) {
+    console.error('GetPortfolioById Error:', error.message, error.stack);
+    return res.status(500).json({ message: 'Unable to fetch portfolio.' });
+  }
+};
+
+// PUT /portfolio/:id  — update a portfolio's data (owner only)
+exports.updatePortfolioById = async (req, res) => {
+  const { id } = req.params;
+  const { title, data } = req.body;
+  if (!data || typeof data !== 'object') {
+    return res.status(400).json({ message: 'Portfolio data is required.' });
+  }
+  try {
+    const portfolioTitle = clampText(title, 140) || `${req.user.email}'s Portfolio`;
+    const result = await pool.query(
+      `UPDATE portfolios
+         SET title = $1, name = $2, data = $3::jsonb, updated_at = NOW()
+       WHERE id = $4 AND user_id = $5
+       RETURNING id, name, title, github_username, data, created_at, updated_at`,
+      [portfolioTitle, portfolioTitle, JSON.stringify(data), id, req.user.id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Portfolio not found.' });
+    }
+    return res.status(200).json({ message: 'Portfolio updated.', portfolio: result.rows[0] });
+  } catch (error) {
+    console.error('UpdatePortfolio Error:', error.message, error.stack);
+    return res.status(500).json({ message: 'Unable to update portfolio.' });
   }
 };

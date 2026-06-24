@@ -11,11 +11,7 @@ const getAuthHeaders = () => {
 
 const parseResponse = async (response) => {
   const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.message || "Request failed");
-  }
-
+  if (!response.ok) throw new Error(data.message || "Request failed");
   return data;
 };
 
@@ -38,3 +34,34 @@ export const savePortfolio = async ({ title, githubUsername, data }) => {
 
   return parseResponse(response);
 };
+
+export async function getUserPortfolios() {
+  const res = await fetch(`${API_BASE}/portfolio`, {
+    method: 'GET',
+    headers: getAuthHeaders(),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'Failed to fetch portfolios');
+  return Array.isArray(data) ? data : data.portfolios ?? [];
+}
+
+export async function deletePortfolio(id) {
+  const res = await fetch(`${API_BASE}/portfolio/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'Failed to delete portfolio');
+  return data;
+}
+
+export async function updatePortfolio(id, { title, data }) {
+  const res = await fetch(`${API_BASE}/portfolio/${id}`, {
+    method: 'PUT',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ title, data }),
+  });
+  const resData = await res.json();
+  if (!res.ok) throw new Error(resData.message || 'Failed to update portfolio');
+  return resData;
+}
