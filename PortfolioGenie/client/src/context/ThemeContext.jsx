@@ -5,7 +5,7 @@ const ThemeContext = createContext();
 export const useTheme = () => useContext(ThemeContext); //custom hook to use the theme context (consumer)
 
 export const ThemeProvider = ({ children }) => {
-  //children is a prop that allows us to pass components as children to the ThemeProvider component
+  //children is a special prop that represents everything nested inside the provider
 
   // Check localStorage for saved theme or default to 'light'
   const [theme, setTheme] = useState(() => {

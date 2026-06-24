@@ -3,6 +3,8 @@ import { PiMagicWandBold } from "react-icons/pi";
 import { MdOutlineIntegrationInstructions } from "react-icons/md";
 
 function HowItWorks() {
+
+  // An array of objects representing steps to illustrate the process of using the application
   const steps = [
     {
       number: "01",
@@ -20,8 +22,8 @@ function HowItWorks() {
     {
       number: "03",
       icon: <LuCodeXml size={50} />,
-      title: "Export & Deploy",
-      description: "Preview, customize, and export your portfolio code",
+      title: "Download & Customize",
+      description: "Preview, customize, and download your portfolio with ease",
     },
   ];
 
