@@ -85,9 +85,15 @@ function Navbar() {
               </>
             )}
 
-            <button className="text-gray-900 dark:text-white hover:text-purple-500 transition-colors duration-100 flex items-center justify-center bg-gray-200 dark:bg-gray-800 p-2 rounded-full" aria-label="Profile">
+            {/* Profile icon → links to /profile if logged in, else /login */}
+            <Link
+              to={isLoggedIn ? "/profile" : "/login"}
+              className="text-gray-900 dark:text-white hover:text-purple-500 transition-colors duration-100 flex items-center justify-center bg-gray-200 dark:bg-gray-800 p-2 rounded-full"
+              aria-label="Profile"
+            >
               <FiUser size={24} />
-            </button>
+            </Link>
+
             <button
               onClick={toggleTheme}
               className="text-gray-900 dark:text-white hover:text-purple-500 transition-colors duration-100 flex items-center justify-center"
@@ -127,9 +133,16 @@ function Navbar() {
                 </button>
               </>
             )}
-            <button className="block w-full text-left text-gray-900 dark:text-white hover:text-purple-500 py-2">
-              <FiUser className="inline mr-2" /> Profile
-            </button>
+
+            {/* Mobile profile link */}
+            <Link
+              to={isLoggedIn ? "/profile" : "/login"}
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-2 text-gray-900 dark:text-white hover:text-purple-500 py-2"
+            >
+              <FiUser size={18} /> Profile
+            </Link>
+
             <button
               onClick={toggleTheme}
               className="block w-full text-left text-gray-900 dark:text-white hover:text-purple-500 py-2"
