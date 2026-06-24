@@ -8,10 +8,8 @@ import { IoSunnyOutline } from "react-icons/io5";
 function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-  
   const location = useLocation();
 
-  // Smoothly scrolls to sections identified by their IDs
   const handleScroll = (id) => {
     const element = document.getElementById(id);
     if (element) {

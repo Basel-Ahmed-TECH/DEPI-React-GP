@@ -5,7 +5,6 @@ import { LuCodeXml } from "react-icons/lu";
 
 
 function Features() {
-  // An array of feature objects with their respective icons, titles, and descriptions
   const features = [
     {
       icon: <MdElectricBolt size={32} />,

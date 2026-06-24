@@ -3,7 +3,6 @@ import { FaRegCheckCircle } from "react-icons/fa";
 import { FaRegFileCode } from "react-icons/fa6";
 
 function AIPowered() {
-  // An array of AI-powered features
   const aiFeatures = [
     {
       title: "Automatic GitHub project analysis",
@@ -22,7 +21,6 @@ function AIPowered() {
     },
   ];
 
-  // An array of objects representing sample projects to showcase GitHub integration
   const projects = [
     {
       title: "E-Commerce Platform",
@@ -37,10 +35,8 @@ function AIPowered() {
   return (
     <section className="py-20 bg-gray-50 dark:bg-[#1E2A3F]">
       <div className="container mx-auto px-4">
-        
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-
           {/* Left Column - AI Features */}
           <div className="bg-gray-50 dark:bg-[#1E2A3F] ">
             {/* Header inside left column */}
