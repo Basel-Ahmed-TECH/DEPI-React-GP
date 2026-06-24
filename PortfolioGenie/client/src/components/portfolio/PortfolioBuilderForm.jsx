@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   FiBriefcase,
   FiCode,
@@ -13,7 +12,6 @@ import {
 } from "react-icons/fi";
 import { BsStars } from "react-icons/bs";
 import { generatePortfolioDraft, savePortfolio } from "../../services/portfolioAPI";
-import { usePortfolio } from "../../context/PortfolioContext";
 
 const emptyEducation = {
   institution: "",
@@ -224,39 +222,16 @@ function TagInput({ tags, onChange, placeholder = "Add a skill..." }) {
 }
 
 function PortfolioBuilderForm({ profile, repos, userData }) {
-  const navigate = useNavigate();
-  const { activePortfolio, persistPortfolio, clearActivePortfolio } = usePortfolio();
-
-  // If we have an activePortfolio (edit/duplicate flow), seed form from it;
-  // otherwise build fresh from the GitHub data.
-  const [form, setForm] = useState(() => {
-    if (activePortfolio?.data) {
-      // Merge saved data with any missing defaults so all fields are present
-      const saved = activePortfolio.data;
-      return {
-        personalInfo: saved.personalInfo ?? buildInitialForm({ profile, repos, userData }).personalInfo,
-        aboutMe:      saved.aboutMe      ?? "",
-        services:     saved.services     ?? [],
-        education:    saved.education    ?? [{ ...emptyEducation }],
-        experience:   saved.experience   ?? [{ ...emptyExperience }],
-        skills:       saved.skills       ?? [],
-        projects:     saved.projects     ?? [],
-        contact:      saved.contact      ?? buildInitialForm({ profile, repos, userData }).contact,
-      };
-    }
-    return buildInitialForm({ profile, repos, userData });
-  });
-
+  const [form, setForm] = useState(() =>
+    buildInitialForm({ profile, repos, userData })
+  );
   const [loadingDraft, setLoadingDraft] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [savedJson, setSavedJson] = useState(null);
 
-  const isEditMode = !!activePortfolio?.id;
-
   const [portfolioTitle, setPortfolioTitle] = useState(() => {
-    if (activePortfolio?.title) return activePortfolio.title;
     const name = profile?.login || "Developer";
     return `${name}'s Portfolio`;
   });
@@ -307,9 +282,6 @@ function PortfolioBuilderForm({ profile, repos, userData }) {
   };
 
   useEffect(() => {
-    // Skip AI draft generation when editing an existing portfolio
-    if (isEditMode || activePortfolio?.data) return;
-
     const timer = window.setTimeout(() => {
       loadDraft();
     }, 0);
@@ -365,16 +337,15 @@ function PortfolioBuilderForm({ profile, repos, userData }) {
       ...form,
       metadata: {
         source: "github-ai-builder",
-        githubUsername: profile?.login ?? activePortfolio?.data?.metadata?.githubUsername ?? "",
+        githubUsername: profile.login,
         generatedAt: new Date().toISOString(),
       },
     };
 
     try {
-      // persistPortfolio uses PUT if activePortfolio has an id, POST otherwise
-      const result = await persistPortfolio({
+      const result = await savePortfolio({
         title: portfolioTitle,
-        githubUsername: profile?.login ?? "",
+        githubUsername: profile.login,
         data: finalData,
       });
 
@@ -385,17 +356,7 @@ function PortfolioBuilderForm({ profile, repos, userData }) {
 
       localStorage.setItem("portfolioGenie:lastPortfolioDraft", JSON.stringify(nextPayload));
       setSavedJson(nextPayload);
-      setSuccess(
-        isEditMode
-          ? "Portfolio updated successfully!"
-          : "Portfolio saved! The JSON payload is ready for the next step."
-      );
-
-      // Clear context and go back to profile after a short delay
-      setTimeout(() => {
-        clearActivePortfolio();
-        navigate("/profile");
-      }, 1500);
+      setSuccess("Portfolio saved. The JSON payload is ready for the next step.");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -444,13 +405,6 @@ function PortfolioBuilderForm({ profile, repos, userData }) {
         </aside>
 
         <div className="space-y-6">
-          {isEditMode && (
-            <div className="rounded-xl border border-blue-500/20 bg-blue-500/10 px-5 py-4 text-sm font-medium text-blue-300 flex items-center gap-2">
-              <FiRefreshCw size={15} />
-              Editing existing portfolio — changes will update your saved version.
-            </div>
-          )}
-
           {loadingDraft && (
             <div className="rounded-xl border border-purple-200 bg-purple-50 px-5 py-4 text-sm font-medium text-purple-800 dark:border-purple-500/20 dark:bg-purple-500/10 dark:text-purple-200">
               Generating your portfolio draft from GitHub...
@@ -695,7 +649,7 @@ function PortfolioBuilderForm({ profile, repos, userData }) {
                 disabled={saving || loadingDraft}
                 className="inline-flex h-[46px] items-center justify-center gap-2 rounded-lg bg-[#070719] px-6 text-sm font-bold text-white transition hover:bg-purple-700 disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-gray-200"
               >
-                {saving ? (isEditMode ? "Updating..." : "Saving...") : (isEditMode ? "Save Changes" : "Continue")}
+                {saving ? "Saving..." : "Continue"}
                 <FiExternalLink size={16} />
               </button>
             </div>

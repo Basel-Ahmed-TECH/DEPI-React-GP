@@ -4,7 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import { GitHubProvider } from './context/GitHubContext';
-import { PortfolioProvider } from './context/PortfolioContext'
 import "./styles/index.css";
 
 createRoot(document.getElementById("root")).render(
@@ -12,9 +11,7 @@ createRoot(document.getElementById("root")).render(
     
       <ThemeProvider>
         <GitHubProvider>
-          <PortfolioProvider>
           <App />
-          </PortfolioProvider>
         </GitHubProvider>
       </ThemeProvider>
     
