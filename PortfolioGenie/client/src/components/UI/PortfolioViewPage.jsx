@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   FiArrowLeft, FiEdit2, FiGithub, FiMail, FiMapPin,
@@ -47,15 +48,16 @@ export default function PortfolioViewPage() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`http://localhost:5000/portfolio/${id}`, {
+        const res = await axios.get(`http://localhost:5000/portfolio/${id}`, {
           headers: getAuthHeaders(),
         });
-        if (res.status === 401) { navigate('/login'); return; }
-        const json = await res.json();
-        if (!res.ok) throw new Error(json.message || 'Failed to load portfolio.');
-        setPortfolio(json.portfolio);
+        setPortfolio(res.data.portfolio);
       } catch (err) {
-        setError(err.message);
+        if (err.response && err.response.status === 401) {
+          navigate('/login');
+          return;
+        }
+        setError(err.response?.data?.message || err.message || 'Failed to load portfolio.');
       } finally {
         setLoading(false);
       }

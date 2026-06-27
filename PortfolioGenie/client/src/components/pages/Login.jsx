@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext"; 
 import { BsStars } from "react-icons/bs";
@@ -24,30 +25,22 @@ export default function Login() {
 
     try {
       // 1. connect to Express server and send login payload
-      const res = await fetch("http://localhost:5000/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: form.email, password: form.password }),
+      const res = await axios.post("http://localhost:5000/auth/login", {
+        email: form.email,
+        password: form.password,
       });
 
-      const data = await res.json();
+      const data = res.data;
 
-      
-      if (!res.ok) {
-        throw new Error(data.message || "Login failed");
-      }
-
-      
       localStorage.setItem("token", data.token);
       setSuccess("Logged in successfully! Welcome back... ");
 
-      
       setTimeout(() => {
         navigate("/github");
       }, 1000);
 
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || err.message || "Login failed");
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext"; 
 import { BsStars } from "react-icons/bs";
@@ -24,30 +25,22 @@ export default function Signup() {
 
     try {
       // 1. Connect to Express server and send signup payload
-      const res = await fetch("http://localhost:5000/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: form.email, password: form.password }),
+      const res = await axios.post("http://localhost:5000/auth/signup", {
+        email: form.email,
+        password: form.password,
       });
       
-      const data = await res.json();
-      
-      
-      if (!res.ok) {
-        throw new Error(data.message || "Registration failed");
-      }
-      
+      const data = res.data;
       
       localStorage.setItem("token", data.token);
       setSuccess("Account created successfully! Redirecting...");
-      
       
       setTimeout(() => {
         navigate("/github");
       }, 1500);
 
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || err.message || "Registration failed");
     } finally {
       setLoading(false);
     }

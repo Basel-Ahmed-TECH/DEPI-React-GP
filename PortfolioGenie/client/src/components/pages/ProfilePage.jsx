@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {
   FiUser, FiShield, FiBriefcase, FiLogOut,
@@ -86,18 +87,15 @@ function ProfileTab({ user, onNameUpdated }) {
     setSaving(true);
     setNameStatus(null);
     try {
-      const res = await fetch('http://localhost:5000/auth/me', {
-        method: 'PATCH',
+      const res = await axios.patch('http://localhost:5000/auth/me', { name: nameVal.trim() }, {
         headers: authHeader(),
-        body: JSON.stringify({ name: nameVal.trim() }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Failed to save name.');
+      const data = res.data;
       setNameStatus({ type: 'success', msg: 'Name updated!' });
       setEditing(false);
       onNameUpdated(data.user.name);
     } catch (err) {
-      setNameStatus({ type: 'error', msg: err.message });
+      setNameStatus({ type: 'error', msg: err.response?.data?.message || err.message });
     } finally {
       setSaving(false);
     }
@@ -210,17 +208,13 @@ function SecurityTab() {
     setLoading(true);
     setStatus(null);
     try {
-      const res = await fetch('http://localhost:5000/auth/change-password', {
-        method: 'POST',
+      const res = await axios.post('http://localhost:5000/auth/change-password', { currentPassword: form.current, newPassword: form.next }, {
         headers: authHeader(),
-        body: JSON.stringify({ currentPassword: form.current, newPassword: form.next }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Failed to update password.');
       setStatus({ type: 'success', msg: 'Password updated successfully.' });
       setForm({ current: '', next: '', confirm: '' });
     } catch (err) {
-      setStatus({ type: 'error', msg: err.message });
+      setStatus({ type: 'error', msg: err.response?.data?.message || err.message });
     } finally {
       setLoading(false);
     }
@@ -321,11 +315,10 @@ function PortfoliosTab() {
     // Otherwise fetch the full record (list endpoint omits data for performance)
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/portfolio/${portfolio.id}`, {
+      const res = await axios.get(`http://localhost:5000/portfolio/${portfolio.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const json = await res.json();
-      if (res.ok) setPreview(json.portfolio);
+      setPreview(res.data.portfolio);
     } catch { /* ignore */ }
   }
 
@@ -333,18 +326,13 @@ function PortfoliosTab() {
     // The list only returns metadata — fetch full record (including data) first
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/portfolio/${portfolio.id}`, {
+      const res = await axios.get(`http://localhost:5000/portfolio/${portfolio.id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const json = await res.json();
-      if (res.ok) {
-        editPortfolio(json.portfolio);   // now has .data field → PUT on save
-        navigate('/github');
-      } else {
-        alert(json.message || 'Failed to load portfolio.');
-      }
-    } catch {
-      alert('Failed to load portfolio.');
+      editPortfolio(res.data.portfolio);   // now has .data field → PUT on save
+      navigate('/github');
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to load portfolio.');
     }
   }
 
@@ -491,30 +479,27 @@ export default function ProfilePage() {
     (async () => {
       try {
         // 1. Fetch user row from DB
-        const res = await fetch('http://localhost:5000/auth/me', {
+        const res = await axios.get('http://localhost:5000/auth/me', {
           headers: authHeader(),
         });
-        if (res.status === 401) {
-          localStorage.removeItem('token');
-          navigate('/login');
-          return;
-        }
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Failed to load profile.');
+        const data = res.data;
 
         // 2. Also fetch portfolio count from DB
         let portfolioCount = 0;
         try {
-          const pRes = await fetch('http://localhost:5000/portfolio', { headers: authHeader() });
-          if (pRes.ok) {
-            const pData = await pRes.json();
-            portfolioCount = Array.isArray(pData) ? pData.length : 0;
-          }
+          const pRes = await axios.get('http://localhost:5000/portfolio', { headers: authHeader() });
+          const pData = pRes.data;
+          portfolioCount = Array.isArray(pData) ? pData.length : 0;
         } catch { /* non-critical */ }
 
         setUser({ ...data.user, portfolioCount });
       } catch (err) {
-        setUserError(err.message);
+        if (err.response && err.response.status === 401) {
+          localStorage.removeItem('token');
+          navigate('/login');
+          return;
+        }
+        setUserError(err.response?.data?.message || err.message || 'Failed to load profile.');
       } finally {
         setUserLoading(false);
       }
