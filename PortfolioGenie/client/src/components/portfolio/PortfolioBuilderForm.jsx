@@ -394,8 +394,8 @@ function PortfolioBuilderForm({ profile, repos, userData }) {
       // Clear context and go back to profile after a short delay
       setTimeout(() => {
         clearActivePortfolio();
-        navigate("/profile");
-      }, 1500);
+        navigate('/templates');
+      }, 1200);
     } catch (err) {
       setError(err.message);
     } finally {

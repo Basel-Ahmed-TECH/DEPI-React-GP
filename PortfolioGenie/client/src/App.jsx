@@ -7,6 +7,8 @@ import Login from './components/pages/Login';
 import GitHubPage from './components/pages/GitHubPage';
 import ProfilePage from './components/pages/ProfilePage';
 import PortfolioViewPage from './components/UI/PortfolioViewPage';
+import TemplatePicker from './components/pages/TemplatePicker';
+import PortfolioPreviewPage from './components/pages/PortfolioPreviewPage';
 function App() {
   return (
     <Router>
@@ -26,7 +28,9 @@ function App() {
                   <Route path="/" element={<HomePage />} />
                   <Route path="/github" element={<GitHubPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="/portfolio/:id"    element={<PortfolioViewPage />} />
+                  <Route path="/portfolio/:id" element={<PortfolioViewPage />} />
+                  <Route path="/templates" element={<TemplatePicker />} />
+                  <Route path="/preview" element={<PortfolioPreviewPage />} />
                 </Routes>
               </main>
               <Footer />
